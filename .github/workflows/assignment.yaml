@@ -1,0 +1,38 @@
+name: CICDassignment
+on:
+  push:
+    branches:
+      - 'v[0-9]+.[0-9]+'
+  pull_request:
+jobs:
+  build:
+    name: ScanFilesystem
+    runs-on: ubuntu-20.04
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v3
+
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@master
+        with:
+          scan-type: 'fs'
+          ignore-unfixed: true
+          format: 'table'
+          output: 'trivy-results.txt'
+          severity: 'HIGH'
+
+      - name: SendMsg
+        if: failure()
+        id: slack
+        uses: slackapi/slack-github-action@v1.24.0
+        env:
+           SLACK_WEBHOOK_URL: ${{ secrets.SLACK_WEBHOOK_URL }}
+
+      - name: UploadFile
+        if: failure()
+        uses: MeilCli/slack-upload-file@v3
+        with:
+          slack_token: ${{ secrets.SLACK_TOKEN }}
+          channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
+          file_name: 'trivy-results.txt'
+          initial_comment: 'post by YH'
