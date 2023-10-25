@@ -68,7 +68,7 @@ jobs:
         run: |
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
         env:
-          TAGS: docker.io/clementiking/cicd-assignment:${{ github.sha}}
+          TAGS: docker.io/clementiking/cicd-assignment
           COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           DIGEST: ${{ steps.build-and-push.outputs.digest }}
