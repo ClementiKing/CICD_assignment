@@ -62,7 +62,7 @@ jobs:
           tags: clementiking/cicd-assignment:${{ github.sha}}
 
       - name: Install cosign
-        uses: sigstore/cosign-installer@v3.1.1
+        uses: sigstore/cosign-installer@v3.1.2
 
       - name: Get data
         id: docker_meta
@@ -73,10 +73,10 @@ jobs:
 
       - name: Get Key
         run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-        
+
       - name: Sign image with a key
         run: |
-          cosign sign --yes --key cosign.key docker.io/clementiking/cicd-assignment:${{ github.sha}}
+          cosign sign --yes --key cosign.key docker.io/clementiking/cicd-assignment:${{ github.sha }}
         env:
           COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
           TAGS: ${{ steps.docker_meta.outputs.tags }}
