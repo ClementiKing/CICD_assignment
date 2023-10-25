@@ -61,6 +61,9 @@ jobs:
           push: true
           tags: clementiking/cicd-assignment:${{ github.sha}}
 
+      - name: Install cosign
+        uses: sigstore/cosign-installer@v3.1.1
+
       - name: Sign image with a key
         run: |
           cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
