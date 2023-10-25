@@ -35,4 +35,4 @@ jobs:
           slack_token: ${{ secrets.SLACK_TOKEN }}
           channel_id: ${{ secrets.SLACK_CHANNEL_ID }}
           file_name: 'trivy-results.txt'
-          initial_comment: 'post by YH'
+          initial_comment: 'post by YangHan'
