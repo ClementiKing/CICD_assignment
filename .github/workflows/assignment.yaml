@@ -71,15 +71,14 @@ jobs:
           images: docker.io/clementiking/cicd-assignment:${{ github.sha}}
           tags: type=sha,format=long      
 
-      - name: Get Key
-        run: echo "${{ secrets.COSIGN_PRIVATE_KEY }}" > cosign.key
-
       - name: Sign image with a key
         run: |
-          cosign sign --yes --key cosign.key docker.io/clementiking/cicd-assignment:${{ github.sha }}
-        env:
-          COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
-          TAGS: ${{ steps.docker_meta.outputs.tags }}
+            cosign sign --yes --key env://COSIGN_PRIVATE_KEY "${TAGS}@${DIGEST}"
+       env:
+        TAGS: ${{ steps.docker_meta.outputs.tags }}
+        COSIGN_PRIVATE_KEY: ${{ secrets.COSIGN_PRIVATE_KEY }}
+        COSIGN_PASSWORD: ${{ secrets.COSIGN_PASSWORD }}
+        DIGEST: ${{ steps.build-and-push.outputs.digest }}
       
       - name: SendMsg
         uses: rtCamp/action-slack-notify@v2
