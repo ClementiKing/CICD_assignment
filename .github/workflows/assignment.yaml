@@ -87,7 +87,7 @@ jobs:
           SLACK_WEBHOOK: ${{ secrets.SLACK_WEBHOOK_URL }}
           SLACK_TITLE: Image built and signed
           SLACK_MESSAGE: |
-            *Name*: Yang Han
+            *Name*: YangHan
             *Metriculation*: A0287267M
             *Email*:<mailto:e1285213@u.nus.edu|e1285213@u.nus.edu>
             *Git*:<https://github.com/ClementiKing/CICD_assignment.git>
