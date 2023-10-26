@@ -23,7 +23,8 @@ jobs:
           filter: '"\[#NORUN\]"'
 
   continue:
-    if: ${{ norunwork.norun-work.outputs.norun-workflow != 'true' }}
+    if: ${{ needs.norun-work.outputs.norun-workflow != 'true' }}
+    needs: [norunwork]
     runs-on: ubuntu-20.04
     steps:    
 
