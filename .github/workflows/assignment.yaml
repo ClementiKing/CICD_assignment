@@ -5,25 +5,25 @@ on:
       - 'v[0-9]+.[0-9]+'
   pull_request:
 jobs:
-  build:
+  norunwork:
     name: ScanFilesystem
     runs-on: ubuntu-20.04
     outputs:
-      norun_workflow: ${{ steps.build.outputs.norun-workflow == 'true' }}
+      norun_workflow: ${{ steps.norunwork.outputs.norun-workflow == 'true' }}
     steps:
       - name: CheckoutLastCommit
         uses: actions/checkout@v2.3.4
         with:
           fetch-depth: 2
 
-      - id: norun-workflow
-        name: norun workflow
+      - id: norun-work
+        name: norun work
         uses: domjtalbot/skip-commit@v1.0.0
         with: 
           filter: '"\[#NORUN\]"'
 
   continue:
-    if: ${{ build.outputs.norun-workflow != 'true' }}
+    if: ${{ norunwork.norun-work.outputs.norun-workflow != 'true' }}
     runs-on: ubuntu-20.04
     steps:    
 
