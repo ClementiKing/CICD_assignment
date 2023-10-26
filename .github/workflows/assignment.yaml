@@ -8,22 +8,26 @@ jobs:
   build:
     name: ScanFilesystem
     runs-on: ubuntu-20.04
+    outputs:
+      norun_workflow: ${{ steps.build.outputs.norun-workflow == 'true' }}
     steps:
+      - name: CheckoutLastCommit
+        uses: actions/checkout@v2.3.4
+        with:
+          fetch-depth: 2
 
-      - name: CheckMsg
-        id: checkmsg
-        run: |
-          if [[ $(git log --format=%B -n 1 $GITHUB_SHA) == *"#NORUN"* ]]; 
-            then echo "::set-output name=norunworkflow::true"
-          else
-            echo "::set-output name=norunworkflow::false"
-            fi
-      - name: Continue
-        if: steps.checkmsg.outputs.norunworkflow != 'true'
-        run: |
+      - id: norun-workflow
+        name: norun workflow
+        uses: domjtalbot/skip-commit@v1.0.0
+        with: 
+          filter: '"\[#NORUN\]"'
 
-      
-      
+  continue:
+    if: ${{ build.outputs.norun-workflow != 'true' }}
+    runs-on: ubuntu-20.04
+    steps:    
+
+
       - name: Checkout code
         uses: actions/checkout@v3
 
